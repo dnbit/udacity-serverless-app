@@ -4,7 +4,8 @@
       "es2017"
     ],
     "moduleResolution": "node",
-    "noUnusedLocals": true,
+    // TODO: Change to true
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
