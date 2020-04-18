@@ -4,6 +4,7 @@ import * as AWS from 'aws-sdk'
 import { TodoItem } from '../models/TodoItem'
 import { TodoAccess } from '../dataLayer/todosAccess'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 //import { getUserId } from '../auth/utils'
 
 const todoAccess = new TodoAccess()
@@ -26,6 +27,10 @@ export async function createTodo(createTodoRequest: CreateTodoRequest, userId: s
         attachmentUrl: " ",
         ...createTodoRequest
     })
+}
+
+export async function updateTodo(todoId: string, updateTodoRequest: UpdateTodoRequest, userId: string): Promise<String> {
+    return todoAccess.updateTodo(todoId, updateTodoRequest,  userId)
 }
 
 export async function deleteTodo(todoId: String, userId: string): Promise<String> {

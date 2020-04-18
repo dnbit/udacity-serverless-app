@@ -5,6 +5,7 @@ import { DocumentClient, DeleteItemOutput } from 'aws-sdk/clients/dynamodb'
 const XAWS = AWSXRay.captureAWS(AWS)
 
 import { TodoItem } from '../models/TodoItem'
+import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 
 export class TodoAccess {
 
@@ -37,6 +38,29 @@ export class TodoAccess {
       }).promise()
   
       return todoItem
+    }
+
+    async updateTodo(todoId: String, updateTodoRequest: UpdateTodoRequest, userId: string): Promise<String> {
+      await this.docClient.update({
+        TableName: this.todosTable,
+        Key: {
+          userId,
+          todoId
+        },
+        UpdateExpression: "set #name = :n, dueDate = :due, done = :d",
+        ExpressionAttributeValues: {
+          ":n": updateTodoRequest.name,
+          ":due": updateTodoRequest.dueDate,
+          ":d": updateTodoRequest.done
+        },
+        ExpressionAttributeNames:{
+          // Attribute name is a reserved keyword so it cannot be used
+          // This is required to change name to something different, such as #name
+          "#name": "name"
+        }
+      }).promise()
+
+      return "Item updated"
     }
 
     async deleteTodo(todoId: String, userId: string): Promise<String> {
