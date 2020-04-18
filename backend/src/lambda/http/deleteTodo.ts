@@ -3,6 +3,7 @@ import * as AWS from 'aws-sdk'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { deleteTodo } from '../../businessLogic/todos'
+import { getUserId } from '../utils'
 
 
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -13,7 +14,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const todoId = event.pathParameters.todoId
 
-  const result = await deleteTodo(todoId)
+  const result = await deleteTodo(todoId, getUserId(event))
 
   // TODO: Remove a TODO item by id
   return {

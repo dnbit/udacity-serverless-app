@@ -5,6 +5,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { TodoItem } from '../../models/TodoItem'
+import { getUserId } from '../utils'
 
 const docClient = new AWS.DynamoDB.DocumentClient()
 const todosTable = process.env.TODOS_TABLE
@@ -19,15 +20,18 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const dueDate = parsedBody.dueDate
   const done = parsedBody.done
 
+  const userId = getUserId(event)
+
   await docClient.update({
     TableName: todosTable,
     Key: {
+      userId,
       todoId
     },
-    UpdateExpression: "set name = :n, dueDate = :dd, done = :d",
+    UpdateExpression: "set name = :n, dueDate = :due, done = :d",
     ExpressionAttributeValues: {
       ":n": name,
-      ":dd": dueDate,
+      ":due": dueDate,
       ":d": done
     },
   }).promise()

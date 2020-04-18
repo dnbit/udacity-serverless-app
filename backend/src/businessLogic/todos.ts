@@ -11,22 +11,23 @@ const todoAccess = new TodoAccess()
 const docClient = new AWS.DynamoDB.DocumentClient()
 const todosTable = process.env.TODOS_TABLE
 
-export async function getAllTodos(): Promise<TodoItem[]> {
-    return todoAccess.getAllTodos()
+export async function getAllTodos(userId: string): Promise<TodoItem[]> {
+    return todoAccess.getAllTodos(userId)
 }
 
-export async function createTodo(createTodoRequest: CreateTodoRequest): Promise<TodoItem> {
+export async function createTodo(createTodoRequest: CreateTodoRequest, userId: string): Promise<TodoItem> {
     const itemId = uuid.v4()
 
     return await todoAccess.createTodo({
         todoId: itemId,
-        userId: "TODO: mock userId",
+        userId: userId,
         createdAt: new Date().toISOString(),
         done: false,
+        attachmentUrl: " ",
         ...createTodoRequest
     })
 }
 
-export async function deleteTodo(todoId: String): Promise<String> {
-    return todoAccess.deleteTodo(todoId)
+export async function deleteTodo(todoId: String, userId: string): Promise<String> {
+    return todoAccess.deleteTodo(todoId, userId)
 }
