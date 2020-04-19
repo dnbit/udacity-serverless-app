@@ -5,12 +5,8 @@ import { TodoItem } from '../models/TodoItem'
 import { TodoAccess } from '../dataLayer/todosAccess'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-//import { getUserId } from '../auth/utils'
 
 const todoAccess = new TodoAccess()
-
-const docClient = new AWS.DynamoDB.DocumentClient()
-const todosTable = process.env.TODOS_TABLE
 
 export async function getAllTodos(userId: string): Promise<TodoItem[]> {
     return todoAccess.getAllTodos(userId)

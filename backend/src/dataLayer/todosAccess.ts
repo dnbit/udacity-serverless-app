@@ -6,6 +6,9 @@ const XAWS = AWSXRay.captureAWS(AWS)
 
 import { TodoItem } from '../models/TodoItem'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+import { createLogger } from '../utils/logger'
+
+const logger = createLogger('auth')
 
 export class TodoAccess {
 
@@ -16,7 +19,7 @@ export class TodoAccess {
     }
   
     async getAllTodos(userId: string): Promise<TodoItem[]> {
-      console.log('Getting all todos')
+      logger.info('Getting all todos')
   
       const result = await this.docClient.query({
         TableName: this.todosTable,
@@ -32,6 +35,7 @@ export class TodoAccess {
     }
   
     async createTodo(todoItem: TodoItem): Promise<TodoItem> {
+      logger.info(`Creating todoItem ${todoItem}`)
       await this.docClient.put({
         TableName: this.todosTable,
         Item: todoItem
@@ -41,6 +45,7 @@ export class TodoAccess {
     }
 
     async updateTodo(todoId: String, updateTodoRequest: UpdateTodoRequest, userId: string): Promise<String> {
+      logger.info(`Updating todo with todoId ${todoId} for userId ${userId}`)
       await this.docClient.update({
         TableName: this.todosTable,
         Key: {
@@ -64,6 +69,7 @@ export class TodoAccess {
     }
 
     async deleteTodo(todoId: String, userId: string): Promise<String> {
+      logger.info(`Deleting todo with todoId ${todoId} for userId ${userId}`)
       await this.docClient.delete({
         TableName: this.todosTable,
         Key: {
@@ -76,6 +82,7 @@ export class TodoAccess {
     }
 
     async updateAttachmentUrl(todoId: String, userId: string, attachmentUrl: string): Promise<String> {
+      logger.info(`Updating AttachmentUrl for todoId ${todoId} and userId ${userId}`)
       await this.docClient.update({
         TableName: this.todosTable,
         Key: {

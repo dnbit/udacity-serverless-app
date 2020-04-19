@@ -4,10 +4,15 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import { updateAttachmentUrl } from '../../businessLogic/todos'
 import { getPresignedUrl } from '../../businessLogic/storage'
 import { getUserId } from '../utils'
+import { createLogger } from '../../utils/logger'
+
+const logger = createLogger('auth')
 
 const image_bucket_name = process.env.IMAGES_S3_BUCKET;
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  logger.info(`generateUploadUrl call received with event ${event}`)
+
   const todoId = event.pathParameters.todoId
   const AttachmentUrl: string = `https://${image_bucket_name}.s3.amazonaws.com/${todoId}`;
   
@@ -15,7 +20,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const uploadUrl = await getPresignedUrl(todoId)
 
-  // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
   return {
     statusCode: 200,
     headers: {
