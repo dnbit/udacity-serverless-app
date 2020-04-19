@@ -36,3 +36,7 @@ export async function updateTodo(todoId: string, updateTodoRequest: UpdateTodoRe
 export async function deleteTodo(todoId: String, userId: string): Promise<String> {
     return todoAccess.deleteTodo(todoId, userId)
 }
+
+export async function updateAttachmentUrl(todoId: String, userId: string, attachmentUrl: string): Promise<String> {
+    return todoAccess.updateAttachmentUrl(todoId, userId, attachmentUrl)
+}
